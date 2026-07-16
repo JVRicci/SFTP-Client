@@ -1,22 +1,21 @@
-from slalchemy.orm import Session
-
+from db.database import SessionLocal
 from db.models import Workspace
-from src.schemas.WorkspaceSchemas import (
-    WorkspaceBase,
-    WorkspaceCreate,
-    WorkspaceResponse,
-)
+from schemas.WorkspaceSchemas import WorkspaceCreate
 
 
 class WorkspaceRepository:
-    def __init__(self, session: Session):
-        self.session = session
+    def __init__(self):
+        self._session = SessionLocal()
 
     def create(self, workspace: WorkspaceCreate):
+        print("Creating workspace:", workspace)
         model = Workspace(**workspace.model_dump())
 
-        self.session.add(model)
-        self.session.commit()
-        self.session.refresh(model)
+        self._session.add(model)
+        self._session.commit()
+        self._session.refresh(model)
 
         return model
+
+    def get_all(self):
+        return self._session.query(Workspace).all()
