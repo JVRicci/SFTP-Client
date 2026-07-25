@@ -1,6 +1,7 @@
 import flet as ft
-from ui.screens.register import RegisterModal
+
 from services.WorkspaceServices import WorkspaceServices
+from ui.screens.register import RegisterModal
 
 
 class Menu:
@@ -8,7 +9,7 @@ class Menu:
         self._title = "SFTP Client for IDEs"
         self._width = width
         self._height = height
-        # self._resizable = resizable
+        self._resizable = resizable
         self.workspace_services = WorkspaceServices()
 
     def register_modal(self, page: ft.Page):
@@ -18,9 +19,9 @@ class Menu:
     def get_servers(self):
         return self.workspace_services.get_all_workspaces()
 
-    def render_table(self, server_list: list = None):
+    def render_table(self, server_list: list | None = None):
         server_row = []
-        if server_list != None:
+        if server_list is not None:
             server_row = [x for x in server_list]
 
         table = ft.DataTable(
@@ -69,7 +70,6 @@ class Menu:
 
     def render(self, page: ft.Page):
         page.title = self._title
-        # page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
         # page.window.resizable = self._resizable
         page.window.width = self._width
