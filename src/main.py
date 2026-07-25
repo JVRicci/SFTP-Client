@@ -7,7 +7,7 @@ from ui.screens.menu import Menu
 from utils.config import LoggerConfig
 
 WIDTH = 400
-HEIGHT = 500
+HEIGHT = 600
 RESIZABLE = False
 
 
