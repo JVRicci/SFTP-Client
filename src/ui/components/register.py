@@ -1,11 +1,13 @@
 import flet as ft
+
 from services.WorkspaceServices import WorkspaceServices
 
 
 class RegisterModal:
-    def __init__(self, page: ft.Page):
+    def __init__(self, page: ft.Page, menu=None):
         self.page = page
         self.workspace_services = WorkspaceServices()
+        self._menu = menu
 
         self.dialog = ft.AlertDialog(
             title=ft.Text("Registrar novo servidor"),
@@ -34,6 +36,8 @@ class RegisterModal:
             }
         )
         self.close_modal()
+
+        self._menu.components()
 
     def close_modal(self):
         self.dialog.open = False

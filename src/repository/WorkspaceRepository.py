@@ -21,14 +21,23 @@ class WorkspaceRepository:
 
     def create(self, workspace: WorkspaceCreate):
         logger.info(f"Creating workspace: {workspace}")
-        # model = Workspace(**workspace.model_dump())
-        model = Workspace(**workspace)
+        stmt = Workspace(**workspace.model_dump())
 
-        self._session.add(model)
+        self._session.add(stmt)
         self._session.commit()
-        self._session.refresh(model)
+        self._session.refresh(stmt)
 
-        return model
+        return stmt
+
+    def delete(self, id):
+        stmt = self._session.query(Workspace).filter(Workspace.id == id).first()
+
+        if not stmt:
+            return False
+
+        self._session.delete(stmt)
+        self._session.commit()
+        return True
 
     def get_all(self) -> list:
         logger.debug("Returning all workspace registers")
@@ -45,15 +54,15 @@ class WorkspaceRepository:
         return workspace
 
     def update(self, id: int, workspace: WorkspaceUpdate):
-        model = self._session.get(Workspace, id)
+        stmt = self._session.get(Workspace, id)
 
-        if model is None:
+        if stmt is None:
             return
 
         for key, value in workspace.model_dump(exclude_unset=True).items():
-            setattr(model, key, value)
+            setattr(stmt, key, value)
 
         self._session.commit()
-        self._session.refresh(model)
+        self._session.refresh(stmt)
 
-        return model
+        return stmt

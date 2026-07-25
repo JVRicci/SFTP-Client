@@ -6,9 +6,9 @@ class WorkspaceBase(BaseModel):
     host: str
     port: int = 22
     username: str
-    remote_path: str
-    local_path: str
-    editor: str
+    remote_path: str | None
+    local_path: str | None
+    editor: str | None
     favorite: bool = False
     notes: str | None = None
 

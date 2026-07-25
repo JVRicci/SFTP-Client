@@ -1,4 +1,5 @@
 from repository.WorkspaceRepository import WorkspaceRepository
+from schemas.WorkspaceSchemas import WorkspaceBase
 
 
 class WorkspaceServices:
@@ -6,7 +7,7 @@ class WorkspaceServices:
         self.repository = WorkspaceRepository()
 
     def create_workspace(self, workspace_data):
-        workspace = self.repository.create(workspace_data)
+        workspace = self.repository.create(WorkspaceBase(**workspace_data))
         return workspace
 
     def get_workspace_by_id(self, workspace_id):

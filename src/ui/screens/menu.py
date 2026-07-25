@@ -1,7 +1,8 @@
 import flet as ft
 
 from services.WorkspaceServices import WorkspaceServices
-from ui.screens.register import RegisterModal
+from ui.components.modal_dialog import Dialog
+from ui.components.register import RegisterModal
 
 
 class Menu:
@@ -13,7 +14,7 @@ class Menu:
         self.workspace_services = WorkspaceServices()
 
     def register_modal(self, page: ft.Page):
-        register_modal = RegisterModal(page)
+        register_modal = RegisterModal(page, self)
         register_modal.render()
 
     def get_servers(self):
@@ -45,7 +46,12 @@ class Menu:
             margin=ft.Alignment.CENTER,
         )
 
+        services = WorkspaceServices()
+
         for server in self.get_servers():
+            print(server)
+            delete_dialog = Dialog(services.delete_workspace(server.id))
+
             row_list.append(
                 ft.DataRow(
                     cells=[
@@ -54,7 +60,11 @@ class Menu:
                             ft.IconButton(icon=ft.Icons.EDIT, icon_color="yellow")
                         ),
                         ft.DataCell(
-                            ft.IconButton(icon=ft.Icons.DELETE, icon_color="red")
+                            ft.IconButton(
+                                icon=ft.Icons.DELETE,
+                                icon_color="red",
+                                on_click=delete_dialog.render_dialog(),
+                            )
                         ),
                     ]
                 )
