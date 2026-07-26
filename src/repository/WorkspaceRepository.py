@@ -21,8 +21,7 @@ class WorkspaceRepository:
 
     def create(self, workspace: WorkspaceCreate):
         logger.info(f"Creating workspace: {workspace}")
-        data = {k: v for k, v in workspace.model_dump().items() if k in Workspace.__table__.columns}
-        stmt = Workspace(**data)
+        stmt = Workspace(**workspace.model_dump())
 
         self._session.add(stmt)
         self._session.commit()

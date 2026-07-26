@@ -60,7 +60,9 @@ class Menu:
                             ft.IconButton(
                                 icon=ft.Icons.DELETE,
                                 icon_color="red",
-                                on_click=lambda e, s=server: self.open_delete_dialog(e.page, s),
+                                on_click=lambda e, s=server: self.open_delete_dialog(
+                                    e.page, s
+                                ),
                             )
                         ),
                     ]
@@ -82,7 +84,9 @@ class Menu:
             self.render(page)
 
         delete_dialog = Dialog(accept=delete_server_callback, cancel=None)
-        dialog_control = delete_dialog.render_dialog(f"Deseja realmente excluir o servidor '{server.name}'?")
+        dialog_control = delete_dialog.render_dialog(
+            f"Deseja realmente excluir o servidor '{server.name}'?"
+        )
         page.overlay.append(dialog_control)
         dialog_control.open = True
         page.update()

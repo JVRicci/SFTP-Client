@@ -8,11 +8,11 @@ class WorkspaceBase(BaseModel):
     port: int = 22
     username: str
     password: str
-    remote_path: str | None = None
-    local_path: str | None = None
-    editor: str | None = None
-    favorite: bool = False
-    notes: str | None = None
+    # remote_path: str | None = None
+    # local_path: str | None = None
+    # editor: str | None = None
+    # favorite: bool = False
+    # notes: str | None = None
 
 
 class WorkspaceCreate(WorkspaceBase):
