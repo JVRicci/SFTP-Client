@@ -21,7 +21,8 @@ class WorkspaceRepository:
 
     def create(self, workspace: WorkspaceCreate):
         logger.info(f"Creating workspace: {workspace}")
-        stmt = Workspace(**workspace.model_dump())
+        data = {k: v for k, v in workspace.model_dump().items() if k in Workspace.__table__.columns}
+        stmt = Workspace(**data)
 
         self._session.add(stmt)
         self._session.commit()
@@ -40,7 +41,7 @@ class WorkspaceRepository:
         return True
 
     def get_all(self) -> list:
-        logger.debug("Returning all workspace registers")
+        logger.info("Returning all workspace registers")
         return self._session.query(Workspace).all()
 
     def get_by_id(self, id: int) -> dict:
@@ -60,7 +61,8 @@ class WorkspaceRepository:
             return
 
         for key, value in workspace.model_dump(exclude_unset=True).items():
-            setattr(stmt, key, value)
+            if key in Workspace.__table__.columns:
+                setattr(stmt, key, value)
 
         self._session.commit()
         self._session.refresh(stmt)

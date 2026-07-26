@@ -3,12 +3,14 @@ from pydantic import BaseModel, ConfigDict
 
 class WorkspaceBase(BaseModel):
     name: str
+    server_type: str
     host: str
     port: int = 22
     username: str
-    remote_path: str | None
-    local_path: str | None
-    editor: str | None
+    password: str
+    remote_path: str | None = None
+    local_path: str | None = None
+    editor: str | None = None
     favorite: bool = False
     notes: str | None = None
 

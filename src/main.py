@@ -20,7 +20,7 @@ def create_database():
 
 
 def main():
-    logger.debug("App Started")
+    logger.info("App Started")
     create_database()
     MainMenu = Menu(width=WIDTH, height=HEIGHT, resizable=RESIZABLE)
     ft.run(MainMenu.render)  # , view=ft.WEB_BROWSER, port=8080)

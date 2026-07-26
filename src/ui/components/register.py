@@ -21,7 +21,8 @@ class RegisterModal:
         name = self.dialog.content.controls[0].value
         server_type = self.dialog.content.controls[1].value
         host = self.dialog.content.controls[2].value
-        port = self.dialog.content.controls[3].value
+        port_val = self.dialog.content.controls[3].value
+        port = int(port_val) if port_val and port_val.isdigit() else 22
         username = self.dialog.content.controls[4].value
         password = self.dialog.content.controls[5].value
 
@@ -37,7 +38,9 @@ class RegisterModal:
         )
         self.close_modal()
 
-        self._menu.components()
+        if self._menu and hasattr(self._menu, "page") and self._menu.page:
+            self._menu.page.clean()
+            self._menu.render(self._menu.page)
 
     def close_modal(self):
         self.dialog.open = False

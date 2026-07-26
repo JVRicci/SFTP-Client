@@ -46,11 +46,8 @@ class Menu:
             margin=ft.Alignment.CENTER,
         )
 
-        services = WorkspaceServices()
-
         for server in self.get_servers():
             print(server)
-            delete_dialog = Dialog(services.delete_workspace(server.id))
 
             row_list.append(
                 ft.DataRow(
@@ -63,7 +60,7 @@ class Menu:
                             ft.IconButton(
                                 icon=ft.Icons.DELETE,
                                 icon_color="red",
-                                on_click=delete_dialog.render_dialog(),
+                                on_click=lambda e, s=server: self.open_delete_dialog(e.page, s),
                             )
                         ),
                     ]
@@ -78,7 +75,20 @@ class Menu:
             self.render_table(row_list),
         ]
 
+    def open_delete_dialog(self, page: ft.Page, server):
+        def delete_server_callback():
+            self.workspace_services.delete_workspace(server.id)
+            page.clean()
+            self.render(page)
+
+        delete_dialog = Dialog(accept=delete_server_callback, cancel=None)
+        dialog_control = delete_dialog.render_dialog(f"Deseja realmente excluir o servidor '{server.name}'?")
+        page.overlay.append(dialog_control)
+        dialog_control.open = True
+        page.update()
+
     def render(self, page: ft.Page):
+        self.page = page
         page.title = self._title
 
         # page.window.resizable = self._resizable
