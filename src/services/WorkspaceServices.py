@@ -19,7 +19,9 @@ class WorkspaceServices:
         return workspaces
 
     def update_workspace(self, workspace_id, workspace_data):
-        workspace = self.repository.update(workspace_id, WorkspaceUpdate(**workspace_data))
+        workspace = self.repository.update(
+            workspace_id, WorkspaceUpdate(**workspace_data)
+        )
         return workspace
 
     def delete_workspace(self, workspace_id):

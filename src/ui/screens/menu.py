@@ -13,9 +13,26 @@ class Menu:
         self._resizable = resizable
         self.workspace_services = WorkspaceServices()
 
-    def register_modal(self, page: ft.Page):
+    def open_register_modal(self, page: ft.Page, server=None):
+
+        if server != None:
+            register_modal = RegisterModal(
+                page,
+                self,
+                server.id,
+                server.name,
+                server.server_type,
+                server.host,
+                server.port,
+                server.username,
+                server.password,
+            )
+            register_modal.render()
+            return
+
         register_modal = RegisterModal(page, self)
         register_modal.render()
+        return
 
     def get_servers(self):
         return self.workspace_services.get_all_workspaces()
@@ -37,31 +54,34 @@ class Menu:
         return table
 
     def components(self):
-        # text = ft.Text("Enter a number:", size=20)
         row_list = []
 
         register = ft.Button(
             "Registrar novo servidor",
-            on_click=lambda e: self.register_modal(e.page),
+            on_click=lambda e: self.open_register_modal(e.page),
             margin=ft.Alignment.CENTER,
         )
 
         for server in self.get_servers():
-            print(server)
-
             row_list.append(
                 ft.DataRow(
                     cells=[
                         ft.DataCell(ft.TextButton(server.name)),
                         ft.DataCell(
-                            ft.IconButton(icon=ft.Icons.EDIT, icon_color="yellow")
+                            ft.IconButton(
+                                icon=ft.Icons.EDIT,
+                                icon_color="yellow",
+                                on_click=lambda e, server=server: self.open_register_modal(
+                                    e.page, server
+                                ),
+                            )
                         ),
                         ft.DataCell(
                             ft.IconButton(
                                 icon=ft.Icons.DELETE,
                                 icon_color="red",
-                                on_click=lambda e, s=server: self.open_delete_dialog(
-                                    e.page, s
+                                on_click=lambda e, server=server: self.open_delete_dialog(
+                                    e.page, server
                                 ),
                             )
                         ),
@@ -72,7 +92,6 @@ class Menu:
         self.render_table()
 
         return [
-            # text,
             register,
             self.render_table(row_list),
         ]
