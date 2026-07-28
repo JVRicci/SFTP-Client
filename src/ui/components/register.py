@@ -101,8 +101,8 @@ class RegisterModal:
         self.server_type_field = ft.Dropdown(
             label="Tipo de servidor",
             options=[
-                ft.dropdown.Option("sftp"),
-                ft.dropdown.Option("ftp"),
+                ft.dropdown.Option("SFTP"),
+                ft.dropdown.Option("FTP"),
             ],
             value=self._server_type if self._workspace else None,
         )
