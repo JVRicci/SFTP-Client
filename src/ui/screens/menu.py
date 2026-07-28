@@ -16,17 +16,7 @@ class Menu:
     def open_register_modal(self, page: ft.Page, server=None):
 
         if server != None:
-            register_modal = RegisterModal(
-                page,
-                self,
-                server.id,
-                server.name,
-                server.server_type,
-                server.host,
-                server.port,
-                server.username,
-                server.password,
-            )
+            register_modal = RegisterModal(page, self, server)
             register_modal.render()
             return
 
@@ -66,7 +56,14 @@ class Menu:
             row_list.append(
                 ft.DataRow(
                     cells=[
-                        ft.DataCell(ft.TextButton(server.name)),
+                        ft.DataCell(
+                            ft.TextButton(
+                                server.name,
+                                on_click=lambda e, server=server: (
+                                    WorkspaceServices.load_ide(server)
+                                ),
+                            )
+                        ),
                         ft.DataCell(
                             ft.IconButton(
                                 icon=ft.Icons.EDIT,

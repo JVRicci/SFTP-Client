@@ -1,32 +1,27 @@
 import flet as ft
 
+from schemas.WorkspaceSchemas import WorkspaceBase
 from services.WorkspaceServices import WorkspaceServices
 
 
 class RegisterModal:
     def __init__(
-        self,
-        page: ft.Page,
-        menu=None,
-        id: int | None = None,
-        name: str = "",
-        server_type="",
-        host="",
-        port=22,
-        username="",
-        password="",
+        self, page: ft.Page, menu=None, workspace: WorkspaceBase | None = None
     ):
         self.page = page
         self.workspace_services = WorkspaceServices()
         self._menu = menu
 
-        self._id: int = id
-        self._name: str = name
-        self._server_type: str = server_type
-        self._host: str = host
-        self._port: int = port
-        self._username: str = username
-        self._password: str = password
+        self._workspace = workspace
+
+        if self._workspace:
+            self._id: int = workspace.id
+            self._name: str = workspace.name
+            self._server_type: str = workspace.server_type
+            self._host: str = workspace.host
+            self._port: int = workspace.port
+            self._username: str = workspace.username
+            self._password: str = workspace.password
 
         self.dialog = ft.AlertDialog(
             title=ft.Text("Registrar novo servidor"),
@@ -96,32 +91,40 @@ class RegisterModal:
         self,
     ):
         self.id_field = ft.TextField(
-            visible=False, value=str(self._id) if self._id is not None else ""
+            visible=False, value=str(self._id) if self._workspace else None
         )
         self.name_field = ft.TextField(
-            label="Nome do servidor", width=300, value=self._name
+            label="Nome do servidor",
+            width=300,
+            value=self._name if self._workspace else None,
         )
         self.server_type_field = ft.Dropdown(
             label="Tipo de servidor",
             options=[
-                ft.dropdown.Option("SFTP"),
-                ft.dropdown.Option("FTP"),
+                ft.dropdown.Option("sftp"),
+                ft.dropdown.Option("ftp"),
             ],
-            value=self._server_type,
+            value=self._server_type if self._workspace else None,
         )
         self.address_field = ft.TextField(
-            label="Hostname ou endereço IP", width=300, value=self._host
+            label="Hostname ou endereço IP",
+            width=300,
+            value=self._host if self._workspace else None,
         )
-        self.port_field = ft.TextField(label="Porta", width=300, value=str(self._port))
+        self.port_field = ft.TextField(
+            label="Porta", width=300, value=str(self._port if self._workspace else "22")
+        )
         self.username_field = ft.TextField(
-            label="Nome de usuário", width=300, value=self._username
+            label="Nome de usuário",
+            width=300,
+            value=self._username if self._workspace else None,
         )
         self.password_field = ft.TextField(
             label="Senha",
             width=300,
             password=True,
             can_reveal_password=True,
-            value=self._password,
+            value=self._password if self._workspace else None,
         )
         save_button = ft.ElevatedButton("Salvar", on_click=lambda e: self.save_server())
         cancel_button = ft.ElevatedButton(

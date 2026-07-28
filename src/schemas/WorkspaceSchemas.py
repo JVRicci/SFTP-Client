@@ -2,6 +2,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class WorkspaceBase(BaseModel):
+    id: int | None = None
     name: str
     server_type: str
     host: str
