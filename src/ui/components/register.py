@@ -2,6 +2,7 @@ import flet as ft
 
 from schemas.WorkspaceSchemas import WorkspaceBase
 from services.WorkspaceServices import WorkspaceServices
+from utils.form_validator import FormValidator
 
 
 class RegisterModal:
@@ -31,28 +32,23 @@ class RegisterModal:
             ),
         )
 
-    def validator(self) -> bool:
-        valid = True
+    def validate_values(self):
+        if FormValidator.password(self.password_field.value):
+            self.password_field.error = "A senha deve possuir no mínimo 3 caracteres."
+            return False
 
-        if len(self.password_field.value.strip()) < 3:
-            self.password_field.error_text = (
-                "A senha deve possuir no mínimo 3 caracteres."
-            )
-            valid = False
-        else:
-            self.password_field.error_text = None
+        if FormValidator.name(self.name_field.value):
+            self.name_field.error = "Informe o nome"
+            return False
 
-        if not self.name_field.value.strip():
-            self.name_field.error_text = "Informe o nome."
-            valid = False
-        else:
-            self.name_field.error_text = None
+        if FormValidator.server_type(self.server_type_field.value):
+            self.server_type_field.error_text = "Tipo de servidor inválido"
+            return False
 
-        return valid
+        return True
 
     def save_server(self):
-        if not self.validator():
-            self.dialog.update()
+        if not self.validate_values():
             return
 
         server_data = {
@@ -112,7 +108,12 @@ class RegisterModal:
             value=self._host if self._workspace else None,
         )
         self.port_field = ft.TextField(
-            label="Porta", width=300, value=str(self._port if self._workspace else "22")
+            label="Porta",
+            width=300,
+            value=str(self._port if self._workspace else "22"),
+            input_filter=ft.InputFilter(
+                allow=True, regex_string=r"^[0-9]*$", replacement_string=""
+            ),
         )
         self.username_field = ft.TextField(
             label="Nome de usuário",

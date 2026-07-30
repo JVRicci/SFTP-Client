@@ -25,7 +25,7 @@ class LoggerConfig:
         stream_handler.setFormatter(formatter)
 
         root_logger.addHandler(file_handler)
-        root_logger.addHandler(stream_handler)
+        # root_logger.addHandler(stream_handler)
 
     @staticmethod
     def get_logger(module_name):

@@ -17,6 +17,7 @@ class Menu:
 
         if server != None:
             register_modal = RegisterModal(page, self, server)
+            print(server.server_type)
             register_modal.render()
             return
 
